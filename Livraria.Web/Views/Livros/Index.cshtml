@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Livraria.Domain.Livro>
+
+@{
+    var apiUrl = Livraria.Web.Helpers.HttpClientHelper.BaseUri;
+
+    ViewBag.Title = "Minha Livraria";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Livros</h2>
+
+<p>@Html.ActionLink("Novo livro", "Cadastrar", "Livros", null, new { @class = "btn btn-primary" })</p>
+
+@if (!Model.Any())
+{
+    <p>Nenhum livro cadastrado.</p>
+}
+else
+{
+    <table id="livros" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Remover</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var livro in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(livro.Titulo, "Alterar", "Livros", new { id = livro.Id }, null)</td>
+                    <td>@livro.Autor</td>
+                    <td>
+                        <button data-livro-id="@livro.Id" class="btn-link js-delete">Remover</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#livros .js-delete").on("click", function () {
+                var button = $(this);
+                var webApiUrl = "@apiUrl"
+
+                if (confirm("Deseja remover o livro?")) {
+                    $.ajax({
+                        url: webApiUrl + "livros/" + button.attr("data-livro-id"),
+                        method: "DELETE",
+                        success: function () {
+                            button.parents("tr").remove();
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+}

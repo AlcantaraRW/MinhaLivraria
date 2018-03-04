@@ -1,0 +1,40 @@
+﻿@model Livraria.Web.Models.LivroViewModel
+
+@{
+    var title = string.IsNullOrWhiteSpace(Model?.Titulo) ? "Cadastrar livro" : Model.Titulo;
+
+    ViewBag.Title = title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@title</h2>
+
+@using (Html.BeginForm("Salvar", "Livros"))
+{
+    <div class="form-group">
+        <label for="Titulo">Título</label>
+        @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Titulo)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Autor)
+        @Html.TextBoxFor(m => m.Autor, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Autor)
+    </div>
+
+    <div class="form-group">
+        <label for="AnoPublicacao">Ano de Publicação</label>
+        @Html.TextBoxFor(m => m.AnoPublicacao, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.AnoPublicacao)
+    </div>
+
+    <div class="form-group">
+        <label for="Isbn">ISBN</label>
+        @Html.TextBoxFor(m => m.Isbn, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Isbn)
+    </div>
+
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-primary">Salvar</button>
+}
